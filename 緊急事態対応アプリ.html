@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>緊急事態対応アプリ - Emergency Response Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .category-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+        }
+        
+        .step-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 15px;
+            border: 2px solid transparent;
+        }
+        
+        .step-card:hover {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .detail-content {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .emergency-contact {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+        
+        .emergency-contact .contact-item {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .category-work {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+        
+        .category-accident {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+        
+        .category-disaster {
+            background: linear-gradient(135deg, #51cf66, #40c057);
+        }
+        
+        .category-heatstroke {
+            background: linear-gradient(135deg, #ff922b, #fd7e14);
+        }
+        
+        .icon-large {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .checklist-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+        
+        .principle-item {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .emergency-step {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .sub-step {
+            background: rgba(156, 163, 175, 0.1);
+            border-left: 3px solid #9ca3af;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        .contact-table th {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 0.5rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .contact-table td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .contact-table tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .contact-table a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-table a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="container mx-auto max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="text-red-500 text-4xl mb-2">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h1 class="text-white text-3xl font-bold mb-2">緊急事態対応アプリ</h1>
+            <p class="text-white text-lg opacity-80">Emergency Response Guide</p>
+        </div>
+
+        <!-- Main Categories -->
+        <div id="main-categories" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 訪問作業時緊急事態 -->
+            <div class="category-card category-work text-white p-8 text-center" onclick="showCategory('work')">
+                <div class="icon-large">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">生産物事故</h2>
+                <p class="text-lg opacity-90">発生時の対応フロー</p>
+            </div>
+
+            <!-- 交通事故 -->
+            <div class="category-card category-accident text-white p-8 text-center" onclick="showCategory('accident')">
+                <div class="icon-large">
+                    <i class="fas fa-car-crash"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">交通事故・車両トラブル</h2>
+                <p class="text-lg opacity-90">発生時の対応フロー</p>
+            </div>
+
+            <!-- 災害発生 -->
+            <div class="category-card category-disaster text-white p-8 text-center" onclick="showCategory('disaster')">
+                <div class="icon-large">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">災害発生</h2>
+                <p class="text-lg opacity-90">発生時の対応フロー</p>
+            </div>
+
+            <!-- 熱中症 -->
+            <div class="category-card category-heatstroke text-white p-8 text-center" onclick="showCategory('heatstroke')">
+                <div class="icon-large">
+                    <i class="fas fa-thermometer-three-quarters"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">熱中症</h2>
+                <p class="text-lg opacity-90">危険予知と対処</p>
+            </div>
+        </div>
+
+        <!-- Category Details -->
+        <div id="category-details" class="hidden">
+            <!-- Back Button -->
+            <button class="back-button text-white px-6 py-3 rounded-full mb-6 flex items-center" onclick="showMainCategories()">
+                <i class="fas fa-arrow-left mr-2"></i>
+                トップに戻る
+            </button>
+
+            <!-- 訪問作業時緊急事態 -->
+            <div id="work-details" class="category-detail hidden">
+                <div class="detail-content p-6 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-tools text-blue-500 mr-3"></i>
+                        生産物事故における発生時の対応フロー
+                    </h2>
+                    
+                    <!-- 基本行動原則 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">■ 基本行動原則</h3>
+                        <div class="principle-item">
+                            <strong>1. 安全の確保を最優先する:</strong> 自身の安全、お客様の安全を第一に確保する
+                        </div>
+                        <div class="principle-item">
+                            <strong>2. 作業を即時中断する:</strong> 事態の悪化を防ぐため、直ちに作業を止める
+                        </div>
+                        <div class="principle-item">
+                            <strong>3. 誠意をもって正直に報告する:</strong> 隠さず、言い訳せず、状況を正確に報告する
+                        </div>
+                        <div class="principle-item">
+                            <strong>4. 単独で判断・約束しない:</strong> 補償や今後の対応について、独断や約束は絶対にしない
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steps -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(1)">
+                        <i class="fas fa-search text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ1</h3>
+                        <p class="text-sm">状況把握と応急処置</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(2)">
+                        <i class="fas fa-comment text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ2</h3>
+                        <p class="text-sm">お客様への報告と謝罪</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(3)">
+                        <i class="fas fa-phone text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ3</h3>
+                        <p class="text-sm">会社への報告&協力業者の連絡先</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(4)">
+                        <i class="fas fa-clipboard-list text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ4</h3>
+                        <p class="text-sm">今後の対応方針の決定</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(5)">
+                        <i class="fas fa-handshake text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ5</h3>
+                        <p class="text-sm">お客様への今後の対応説明</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(6)">
+                        <i class="fas fa-door-open text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ6</h3>
+                        <p class="text-sm">現場の保全と退去</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(7)">
+                        <i class="fas fa-calendar-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ7</h3>
+                        <p class="text-sm">次のお客様への連絡</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showWorkStep(8)">
+                        <i class="fas fa-file-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">事後対応</h3>
+                        <p class="text-sm">社内業務</p>
+                    </div>
+                </div>
+
+                <!-- Work Step Details -->
+                <div id="work-step-details" class="detail-content p-6 hidden">
+                    <div id="work-step-content"></div>
+                </div>
+            </div>
+
+            <!-- 交通事故 -->
+            <div id="accident-details" class="category-detail hidden">
+                <div class="detail-content p-6 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-car-crash text-red-500 mr-3"></i>
+                        交通事故・車両トラブル発生時の対応フロー
+                    </h2>
+                    
+                    <!-- 基本行動原則 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">■ 基本行動原則</h3>
+                        <div class="principle-item">
+                            <strong>1. 人命救助を最優先する:</strong> 負傷者がいる場合は、何よりもまず救護活動を行う
+                        </div>
+                        <div class="principle-item">
+                            <strong>2. 二次災害を防止する:</strong> ハザードランプや発煙筒などで後続車に危険を知らせ、安全な場所に避難する
+                        </div>
+                        <div class="principle-item">
+                            <strong>3. 警察に必ず通報する:</strong> 事故の大小にかかわらず、必ず警察（110番）に連絡し、指示を仰ぐ
+                        </div>
+                        <div class="principle-item">
+                            <strong>4. その場で示談しない:</strong> 補償や過失割合について、その場での独断や約束（示談）は絶対にしない
+                        </div>
+                        
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 mt-4">
+                            <h4 class="font-semibold text-green-800 mb-2"><i class="fas fa-car mr-2"></i>車両トラブル（事故以外）の場合:</h4>
+                            <ul class="list-disc list-inside text-green-700 text-sm">
+                                <li>警察への通報は不要です</li>
+                                <li>安全確保を最優先してください</li>
+                                <li>東京海上日動へ連絡(0120-119-110)</li>
+                                <li>会社への報告を忘れずに行ってください</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steps -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(1)">
+                        <i class="fas fa-shield-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ1</h3>
+                        <p class="text-sm">安全確保と応急処置</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(2)">
+                        <i class="fas fa-users text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ2</h3>
+                        <p class="text-sm">相手方への対応</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(3)">
+                        <i class="fas fa-phone text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ3</h3>
+                        <p class="text-sm">会社への報告（第一報）</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(4)">
+                        <i class="fas fa-clipboard-list text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ4</h3>
+                        <p class="text-sm">今後の対応方針の決定</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(5)">
+                        <i class="fas fa-file-invoice text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ5</h3>
+                        <p class="text-sm">保険会社への報告</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(6)">
+                        <i class="fas fa-police text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ6</h3>
+                        <p class="text-sm">現場での警察対応と退去</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(7)">
+                        <i class="fas fa-calendar-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ7</h3>
+                        <p class="text-sm">次のお客様への連絡</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showAccidentStep(8)">
+                        <i class="fas fa-file-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">事後対応</h3>
+                        <p class="text-sm">社内業務</p>
+                    </div>
+                </div>
+
+                <!-- Accident Step Details -->
+                <div id="accident-step-details" class="detail-content p-6 hidden">
+                    <div id="accident-step-content"></div>
+                </div>
+            </div>
+
+            <!-- 災害発生 -->
+            <div id="disaster-details" class="category-detail hidden">
+                <div class="detail-content p-6 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-bolt text-green-500 mr-3"></i>
+                        災害発生時の対応フロー
+                    </h2>
+                    
+                    <!-- 基本行動原則 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">■ 基本行動原則</h3>
+                        <div class="principle-item">
+                            <strong>1. 人命救助を最優先する:</strong> 自身の安全確保はもちろん、周囲に助けを必要とする人がいれば、可能な範囲で協力する
+                        </div>
+                        <div class="principle-item">
+                            <strong>2. 二次災害を防止する:</strong> 周囲の状況をよく確認し、さらなる危険を回避する行動をとる
+                        </div>
+                        <div class="principle-item">
+                            <strong>3. 正確な情報を入手する:</strong> ラジオやスマートフォンなどを活用し、公的機関からの信頼できる情報に基づいて行動する
+                        </div>
+                        <div class="principle-item">
+                            <strong>4. むやみに移動しない:</strong> 安全が確認できない状況での移動は避け、安全な場所で待機する
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steps -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showDisasterStep(1)">
+                        <i class="fas fa-shield-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ1</h3>
+                        <p class="text-sm">安全確保と初期対応</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showDisasterStep(2)">
+                        <i class="fas fa-phone text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ2</h3>
+                        <p class="text-sm">会社への報告</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showDisasterStep(3)">
+                        <i class="fas fa-route text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ3</h3>
+                        <p class="text-sm">その後の行動方針</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showDisasterStep(4)">
+                        <i class="fas fa-toolbox text-2xl mb-2"></i>
+                        <h3 class="font-semibold">平時の備え</h3>
+                        <p class="text-sm">防災グッズと緊急連絡先</p>
+                    </div>
+                </div>
+
+                <!-- Disaster Step Details -->
+                <div id="disaster-step-details" class="detail-content p-6 hidden">
+                    <div id="disaster-step-content"></div>
+                </div>
+            </div>
+
+            <!-- 熱中症 -->
+            <div id="heatstroke-details" class="category-detail hidden">
+                <div class="detail-content p-6 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-thermometer-three-quarters text-orange-500 mr-3"></i>
+                        熱中症発生時の対応フロー
+                    </h2>
+                    
+                    <!-- 基本行動原則 -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">■ 基本行動原則</h3>
+                        <div class="bg-orange-100 border-l-4 border-orange-500 p-4 mb-4">
+                            <p class="text-orange-800 font-semibold">「予防は治療に勝る」- 少しでも異変を感じたら、早めに対処することが重症化を防ぐ鍵となります。</p>
+                        </div>
+                        <div class="principle-item">
+                            <strong>1. 体調の変化を最優先する:</strong> 自身の体の変化に注意を払い、無理をしない
+                        </div>
+                        <div class="principle-item">
+                            <strong>2. 二次災害を防止する:</strong> 症状が出た際は、速やかに作業を中断し、安全な場所へ移動する
+                        </div>
+                        <div class="principle-item">
+                            <strong>3. 正確な情報を入手する:</strong> 自身の症状や周囲の状況を冷静に把握する
+                        </div>
+                        <div class="principle-item">
+                            <strong>4. 一人で無理をしない:</strong> 症状が改善しない場合や判断に迷う場合は、助けを求める
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Steps -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showHeatstrokeStep(1)">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ1</h3>
+                        <p class="text-sm">初期対応（症状覚知時）</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showHeatstrokeStep(2)">
+                        <i class="fas fa-phone text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ2</h3>
+                        <p class="text-sm">報告（安全確保後）</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showHeatstrokeStep(3)">
+                        <i class="fas fa-route text-2xl mb-2"></i>
+                        <h3 class="font-semibold">ステップ3</h3>
+                        <p class="text-sm">その後の行動方針</p>
+                    </div>
+                    <div class="step-card bg-white bg-opacity-20 text-white p-4 text-center" onclick="showHeatstrokeStep(4)">
+                        <i class="fas fa-shield-alt text-2xl mb-2"></i>
+                        <h3 class="font-semibold">平時の備え</h3>
+                        <p class="text-sm">予防策</p>
+                    </div>
+                </div>
+
+                <!-- Heatstroke Step Details -->
+                <div id="heatstroke-step-details" class="detail-content p-6 hidden">
+                    <div id="heatstroke-step-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMainCategories() {
+            document.getElementById('main-categories').classList.remove('hidden');
+            document.getElementById('category-details').classList.add('hidden');
+            
+            // Hide all category details
+            const categoryDetails = document.querySelectorAll('.category-detail');
+            categoryDetails.forEach(detail => detail.classList.add('hidden'));
+            
+            // Hide all step details
+            const stepDetails = document.querySelectorAll('[id$="-step-details"]');
+            stepDetails.forEach(detail => detail.classList.add('hidden'));
+        }
+
+        function showCategory(category) {
+            document.getElementById('main-categories').classList.add('hidden');
+            document.getElementById('category-details').classList.remove('hidden');
+            
+            // Hide all category details first
+            const categoryDetails = document.querySelectorAll('.category-detail');
+            categoryDetails.forEach(detail => detail.classList.add('hidden'));
+            
+            // Show selected category
+            document.getElementById(category + '-details').classList.remove('hidden');
+        }
+
+        function showWorkStep(stepNumber) {
+            const stepDetails = document.getElementById('work-step-details');
+            const stepContent = document.getElementById('work-step-content');
+            
+            stepDetails.classList.remove('hidden');
+            
+            let content = '';
+            
+            switch(stepNumber) {
+                case 1:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ1: 状況把握と応急処置</h3>
+                        
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">共通の初期対応</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>冷静になる:</strong> 深呼吸し、落ち着いて状況を把握する
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>二次災害の防止:</strong> 周囲の安全を確認する（感電の危険がないか、床が濡れて滑らないか等）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>状況の記録:</strong> スマートフォン等で、発生日時、場所、状況がわかるように写真を複数枚撮影する
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-lg mb-3">事象別具体的な応急処置</h4>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">A. 止水栓・給水管の破損</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 水道メーターでの止水: お客様に水道メーターの場所を確認し、許可を得て大元のバルブを閉め、家全体の水を止める
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 漏水箇所の養生: 噴き出した水が周囲に広がらないよう、タオルや雑巾、バケツなどを使って被害拡大を防ぐ
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 電源の確認: 漏水箇所周辺にコンセントや電化製品がある場合は、感電防止のため、お客様に許可を得てブレーカーを落とす
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">B. 床・壁・建具などへの損傷</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 損傷箇所の確認と写真撮影
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 現状の保護（養生シートなど）
+                                </div>
+                                <div class="text-red-600 font-semibold">※自己判断で補修作業は絶対に行わない</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">C. お客様の家財の破損</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 許可を得て安全な場所に移動
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 破損状況の多角的な写真撮影
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 破片の確保
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">D. 作業に起因する新たな水漏れ</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 水道メーターでの止水
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 原因の特定（暫定）
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 状況の記録
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 2:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ2: お客様への報告と謝罪</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>誠心誠意の謝罪:</strong> 深くお詫びし、状況を正直に説明
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>今後の対応の約束:</strong> 「会社が責任を持って誠意をもって対応いたします」と伝える
+                            </div>
+                            <div class="text-red-600 font-semibold mt-2">※個人レベルでの独断的な対応約束は禁止</div>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ3: 会社への報告&協力業者の連絡先</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold mb-2">報告項目:</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 自分の氏名
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 発生場所・時刻
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 発生事象の内容
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 応急処置の内容
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 顧客の様子
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 現場状況（写真と共に説明）
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-100 border-l-4 border-blue-500 p-4 mt-6">
+                            <h4 class="font-semibold text-blue-800 mb-3 flex items-center">
+                                <i class="fas fa-phone-alt mr-2"></i>
+                                給排水管トラブル連絡先
+                            </h4>
+                            <div class="overflow-x-auto">
+                                <table class="contact-table">
+                                    <thead>
+                                        <tr>
+                                            <th>営業所</th>
+                                            <th>水道業者名</th>
+                                            <th>担当者</th>
+                                            <th>電話番号</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>京都</td>
+                                            <td>NTパイピング</td>
+                                            <td>谷口様</td>
+                                            <td><a href="tel:09036258176">090-3625-8176</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>大阪</td>
+                                            <td>カズキ設備</td>
+                                            <td>広橋様</td>
+                                            <td><a href="tel:09042745887">090-4274-5887</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>枚方</td>
+                                            <td>NPパイピング</td>
+                                            <td>谷口様</td>
+                                            <td><a href="tel:09036258176">090-3625-8176</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>茨木</td>
+                                            <td>NPパイピング</td>
+                                            <td>谷口様</td>
+                                            <td><a href="tel:09036258176">090-3625-8176</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>守口</td>
+                                            <td>カズキ設備</td>
+                                            <td>広橋様</td>
+                                            <td><a href="tel:09042745887">090-4274-5887</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>岡山</td>
+                                            <td>龍樹</td>
+                                            <td>岡本様</td>
+                                            <td><a href="tel:09014422888">090-1442-2888</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>岡山東</td>
+                                            <td>龍樹</td>
+                                            <td>岡本様</td>
+                                            <td><a href="tel:09014422888">090-1442-2888</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="2">福岡</td>
+                                            <td>①MYS㈱</td>
+                                            <td>松藤様</td>
+                                            <td><a href="tel:08052649818">080-5264-9818</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>②㈲出水設備工業</td>
+                                            <td>平田様</td>
+                                            <td><a href="tel:08052499691">080-5249-9691</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">北九州</td>
+                                            <td>①インテグラルメンテナンス</td>
+                                            <td>長安様</td>
+                                            <td><a href="tel:09049932039">090-4993-2039</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>②五嶋技研</td>
+                                            <td>五嶋様</td>
+                                            <td><a href="tel:09043539861">090-4353-9861</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>③佐溝空衛設備</td>
+                                            <td>佐溝様</td>
+                                            <td><a href="tel:09059495851">090-5949-5851</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">中津</td>
+                                            <td>①中野設備</td>
+                                            <td>中野様</td>
+                                            <td><a href="tel:09043546276">090-4354-6276</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>②インテグラルメンテナンス</td>
+                                            <td>長安様</td>
+                                            <td><a href="tel:09049932039">090-4993-2039</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>③五嶋技研</td>
+                                            <td>五嶋様</td>
+                                            <td><a href="tel:09043539861">090-4353-9861</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>熊本</td>
+                                            <td>川副建設</td>
+                                            <td>川副様</td>
+                                            <td><a href="tel:08064585757">080-6458-5757</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>宇城</td>
+                                            <td>川副建設</td>
+                                            <td>川副様</td>
+                                            <td><a href="tel:08064585757">080-6458-5757</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-blue-700 mt-3"><i class="fas fa-info-circle mr-1"></i>電話番号をタップすると直接発信できます（スマートフォンの場合）</p>
+                        </div>
+                    `;
+                    break;
+                case 4:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ4: 今後の対応方針の決定</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 会社からの指示を待つ
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 指示内容を整理・メモ
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> お客様への説明準備
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 5:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ5: お客様への今後の対応説明</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 会社方針として修理・復旧内容を説明
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> スケジュールの説明
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 連絡先の提供
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 必要に応じて書面での説明
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 6:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ6: 現場の保全と退去</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 清掃・安全確認
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 作業の中止/続行についての説明
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 改めて謝罪
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 今後の連絡方法の説明
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 7:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ7: 次のお客様への連絡</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 訪問時間の変更・調整の連絡
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 管理者からの連絡要否の確認
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 8:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">事後対応（社内業務）</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 詳細な報告書の作成と提出
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 原因究明と再発防止策の策定
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 全社での共有
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            stepContent.innerHTML = content;
+        }
+
+        function showAccidentStep(stepNumber) {
+            const stepDetails = document.getElementById('accident-step-details');
+            const stepContent = document.getElementById('accident-step-content');
+            
+            stepDetails.classList.remove('hidden');
+            
+            let content = '';
+            
+            switch(stepNumber) {
+                case 1:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ1: 安全確保と応急処置</h3>
+                        
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">共通の初期対応</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>車両の停止と安全確保:</strong> 直ちに運転を中止し、ハザードランプを点灯
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>安全な場所へ移動:</strong> 後続車からの追突防止のため、車両を路肩などへ移動
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>負傷者の救護（最優先）:</strong> 負傷者がいる場合は直ちに119番通報
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>警察への連絡（義務）:</strong> 必ず110番通報し、事故の詳細を報告
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-lg mb-3">事象別具体的な対応</h4>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">A. 車両同士の物損事故</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 相手方の情報確認（氏名、住所、連絡先、勤務先、ナンバー、保険情報）
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 事故現場の写真撮影（全体、損傷箇所、ナンバープレート等）
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">B. 人身事故</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 被害者の救護を最優先で119番通報
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 誠意ある対応（ただし過失を認めたり賠償約束はしない）
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 目撃者の確保
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">C. 自損事故</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 公共物・私有物の損傷有無確認
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 損傷がある場合は警察に報告
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 損傷状況の記録
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-green-700 mb-2">D. 車両トラブル（事故以外）</h5>
+                                
+                                <div class="bg-green-50 p-3 rounded mb-2">
+                                    <h6 class="font-semibold text-green-800 mb-2">■ バッテリー上がり</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> ハザードランプを点灯し、安全な場所へ移動
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> エンジンを切り、パーキングブレーキをかける
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 東京海上日動へ連絡(0120-119-110)
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-green-50 p-3 rounded mb-2">
+                                    <h6 class="font-semibold text-green-800 mb-2">■ ガス欠</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 安全な場所に停車
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> ハザードランプ・三角表示板で後続車に注意喚起
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 東京海上日動へ連絡してロードサービス依頼
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-green-50 p-3 rounded mb-2">
+                                    <h6 class="font-semibold text-green-800 mb-2">■ キー閉じ込み</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 焦らず、スペアキーの有無を確認
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> スペアキーがない場合は東京海上日動へ連絡
+                                    </div>
+                                    <div class="text-sm text-gray-600 ml-6">※エンジンをかけたままの場合は特に注意</div>
+                                </div>
+                                
+                                <div class="bg-green-50 p-3 rounded mb-2">
+                                    <h6 class="font-semibold text-green-800 mb-2">■ パンク</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 安全な場所に停車
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> スペアタイヤの有無を確認
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 交換が困難な場合は東京海上日動へ連絡
+                                    </div>
+                                    <div class="text-sm text-gray-600 ml-6">※高速道路上では無理にタイヤ交換しない</div>
+                                </div>
+                                
+                                <div class="bg-green-50 p-3 rounded mb-2">
+                                    <h6 class="font-semibold text-green-800 mb-2">■ 脱輪</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 無理に動かさない
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 二次事故防止のため三角表示板を設置
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> 東京海上日動へ連絡
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 2:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ2: 相手方への対応</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 感情的にならず丁寧な対応
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 安易な約束は禁止
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 「会社と保険会社を通じて対応」と伝える
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> お互いの連絡先を確実に交換
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ3: 会社への報告（第一報）</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold mb-2">報告項目:</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 誰が（自分の氏名）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> どこで（事故発生場所）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> いつ（発生時刻）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 何が（事故の内容）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 相手方の情報
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 被害の程度
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> どうした（取った措置）
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 mt-4">
+                            <h4 class="font-semibold text-green-800 mb-3"><i class="fas fa-car mr-2"></i>車両トラブルの場合の報告項目</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>トラブルの種類:</strong> バッテリー上がり、ガス欠、キー閉じ込み、パンク、脱輪等
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>車両の現在地と状態:</strong> できるだけ詳しく（目印となる建物や交差点名等）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>ロードサービスの手配状況:</strong> 東京海上日動への連絡完了、到着予定時刻
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>復旧見込み時間:</strong> サービス会社から聞いた見込み時間
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>顧客訪問への影響:</strong> 次の訪問予定への影響度合い
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 4:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ4: 今後の対応方針の決定</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 会社からの指示を待つ
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 警察の現場検証終了まで現場待機
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 5:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ5: 保険会社・ロードサービスへの連絡</h3>
+                        <div class="emergency-step">
+                            <div class="bg-blue-100 border-l-4 border-blue-500 p-4 mb-4">
+                                <h4 class="font-semibold text-blue-800 mb-2">SMAサポート株式会社 事故サポートセンター</h4>
+                                <div class="text-blue-700">
+                                    <div class="mb-2"><strong>平日の連絡先:</strong></div>
+                                    <div>メール：smas-jiko@sma-s.co.jp</div>
+                                    <div>FAX：03-5358-6350</div>
+                                    <div>TEL：03-5358-6331</div>
+                                    <div class="mt-3 mb-2"><strong>休日の事故受付連絡先:</strong></div>
+                                    <div>TEL：0120-713-460（SMAフリーダイヤル）</div>
+                                </div>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 指定の連絡先へ必ず連絡
+                            </div>
+                            
+                            <div class="bg-green-100 border-l-4 border-green-500 p-4 mt-6">
+                                <h4 class="font-semibold text-green-800 mb-3 flex items-center">
+                                    <i class="fas fa-car mr-2"></i>
+                                    車のトラブル時の連絡先
+                                </h4>
+                                <div class="text-green-700">
+                                    <div class="mb-3">
+                                        <strong class="text-green-900">交通事故以外のトラブルの場合:</strong>
+                                    </div>
+                                    <div class="bg-white rounded p-3 mb-3">
+                                        <div class="text-sm text-gray-600 mb-2">対象トラブル:</div>
+                                        <ul class="list-disc list-inside text-sm text-gray-700 mb-3">
+                                            <li>バッテリー上がり</li>
+                                            <li>ガス欠</li>
+                                            <li>キー閉じ込み</li>
+                                            <li>パンク</li>
+                                            <li>脱輪</li>
+                                        </ul>
+                                        <div class="border-t pt-2">
+                                            <div class="font-semibold text-green-900">東京海上日動火災保険(株)</div>
+                                            <div class="text-lg font-bold text-green-800 mt-1">
+                                                <a href="tel:0120119110" class="hover:underline">TEL: 0120-119-110</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-green-600">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        交通事故の場合はSMAサポートへ、その他の車トラブルは東京海上日動へご連絡ください
+                                    </div>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <h5 class="font-semibold text-green-900 mb-2">東京海上日動への連絡時の情報準備</h5>
+                                        <div class="bg-white rounded p-3 mb-3">
+                                            <div class="text-sm text-gray-600 mb-2">連絡時に伝える情報:</div>
+                                            <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                                                <li>契約者名・会社名</li>
+                                                <li>車両ナンバー</li>
+                                                <li>現在地（できるだけ詳しく）</li>
+                                                <li>トラブルの内容</li>
+                                                <li>車両の状態</li>
+                                                <li>連絡先電話番号</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="bg-white rounded p-3">
+                                            <div class="text-sm text-gray-600 mb-2">ロードサービスの流れ:</div>
+                                            <ol class="list-decimal list-inside text-sm text-gray-700 space-y-1">
+                                                <li>東京海上日動へ電話(0120-119-110)</li>
+                                                <li>トラブル内容と現在地を伝える</li>
+                                                <li>到着予定時刻を確認</li>
+                                                <li>会社へ状況報告</li>
+                                                <li>サービス到着まで安全な場所で待機</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 6:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ6: 現場での警察対応と退去</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 警察の実況見分に協力
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 不明な点は憶測で答えない
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 相手方や目撃者の連絡先を再確認
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 警察から許可が出れば現場退去
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 会社に退去の報告
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 7:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ7: 次のお客様への連絡</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 訪問予定への影響がある場合は速やかに連絡
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 遅れの謝罪と時間調整
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 大きな遅延の場合は管理者に相談
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 8:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">事後対応（社内業務）</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> 帰社後すぐに詳細な報告書作成・提出
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 必要に応じてSMAサポートにも連絡書提出
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 原因分析・再発防止策の検討・共有
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            stepContent.innerHTML = content;
+        }
+
+        function showDisasterStep(stepNumber) {
+            const stepDetails = document.getElementById('disaster-step-details');
+            const stepContent = document.getElementById('disaster-step-content');
+            
+            stepDetails.classList.remove('hidden');
+            
+            let content = '';
+            
+            switch(stepNumber) {
+                case 1:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ1: 安全確保と初期対応</h3>
+                        
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">共通の初期対応</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>慌てずに減速:</strong> 急ブレーキは追突の原因。ハザードランプを点灯し、ゆっくりと減速
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>安全な場所に停車:</strong> 道路の左側に寄せて停車。緊急車両の通行の妨げになる場所は避ける
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>情報収集:</strong> ラジオやスマートフォンで災害情報、交通情報を確認。原則として車内で待機
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-lg mb-3">災害別具体的な対応</h4>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">A. 大きな地震が発生した場合</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 慌てずに減速（急ブレーキは絶対に避ける）
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 安全な場所に停車し、エンジンを停止
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 車内で情報収集。揺れが収まるまで車内で待機
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 避難する場合：キーは車に置いたまま、ドアはロックしない。連絡先メモを置き、緊急避難用リュックを持って徒歩で避難
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">B. 津波警報・注意報が発令された場合</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 即座に高台へ避難：沿岸部や川沿いの場合は、ためらわずに高台や堅牢な避難ビルを目指す
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 車両を置いて避難：渋滞で進まない場合は、車を置いて徒歩で避難を決断
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 停車措置：キーは置いたまま、ドアはロックせずに避難
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-red-700 mb-2">C. 豪雨・洪水で道路が冠水した場合</h5>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 危険箇所を避ける：アンダーパス、川沿いの道、崖の近くには絶対に近づかない
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 無理な走行はしない：水位がタイヤの半分を超えたら、安全な場所に車を移動
+                                </div>
+                                <div class="checklist-item">
+                                    <input type="checkbox"> 脱出準備：水位がドアの高さまで来ると水圧でドアが開かなくなる。早めに窓を開けるか、脱出用ハンマーなどで窓を割り脱出
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 2:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ2: 会社への報告（安全確保後）</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold mb-2">報告項目:</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 誰が（自分の氏名）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> どこで（現在地・可能な限り詳しく）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 被害は（自身のケガの有無、同乗者の状況）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> どうした（周囲の状況、車両の状態）
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ3: その後の行動方針</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">帰宅困難時の対応</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> むやみに移動を開始せず、会社や自治体の指示に従う
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 公共交通機関が停止している場合は、安全な場所で待機
+                            </div>
+                            
+                            <h4 class="font-semibold text-lg mb-3 mt-4">車中泊の注意</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> エコノミークラス症候群対策：定期的なストレッチ、水分補給
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 一酸化炭素中毒に注意：エンジンをかけたままの就寝は厳禁
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 4:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">平時の備えと緊急連絡先</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">防災グッズの点検と管理</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 毎月1日など、定期的に車載の「緊急避難用リュック」や防災グッズの点検を行う
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 食料・飲料水の賞味期限確認
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 電池の残量確認
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 医薬品の使用期限確認
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 必要であれば交換・補充を申請
+                            </div>
+                            
+                            <h4 class="font-semibold text-lg mb-3 mt-4">緊急連絡先とお役立ちリンク集</h4>
+                            <div class="bg-blue-100 border-l-4 border-blue-500 p-4">
+                                <div class="mb-2"><strong>災害用伝言ダイヤル：</strong>171</div>
+                                <div class="mb-2"><strong>気象庁：</strong>https://www.jma.go.jp/</div>
+                                <div class="mb-2"><strong>ハザードマップポータルサイト：</strong>https://disaportal.gsi.go.jp/</div>
+                                <div><strong>NHK ニュース・防災：</strong>https://www3.nhk.or.jp/news/</div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            stepContent.innerHTML = content;
+        }
+
+        function showHeatstrokeStep(stepNumber) {
+            const stepDetails = document.getElementById('heatstroke-step-details');
+            const stepContent = document.getElementById('heatstroke-step-content');
+            
+            stepDetails.classList.remove('hidden');
+            
+            let content = '';
+            
+            switch(stepNumber) {
+                case 1:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ1: 初期対応（症状覚知時）</h3>
+                        
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">熱中症の危険サイン（初期症状）</h4>
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-orange-700 mb-2">体調の変化</h5>
+                                <div class="text-sm text-gray-700">めまい、立ちくらみ、頭痛、吐き気、嘔吐、倦怠感、体がだるい、すぐに疲れる</div>
+                            </div>
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-orange-700 mb-2">意識・精神状態の変化</h5>
+                                <div class="text-sm text-gray-700">ボーッとする、集中力・注意力の低下、イライラする、呼びかけへの反応がおかしい</div>
+                            </div>
+                            <div class="sub-step">
+                                <h5 class="font-semibold text-orange-700 mb-2">体の症状</h5>
+                                <div class="text-sm text-gray-700">筋肉痛、筋肉の硬直、大量の汗または汗が出ない、体温が高い、ふらつき、生あくび</div>
+                            </div>
+                        </div>
+                        
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">迅速な対応ステップ</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>即時対応:</strong> 体調異変を感じたら、すぐに作業を中断する
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>涼しい場所へ移動:</strong> 冷房の効いた休憩場所、または日陰など涼しい場所を確保する
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>体を冷やす:</strong> 衣服をゆるめて風通しを良くし、首・脇の下・足の付け根を冷やす。可能であれば全身に水をかける
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>水分・塩分補給:</strong> 経口補水液やスポーツドリンク、食塩水（水1Lに塩1〜2g）を摂取する
+                            </div>
+                            <div class="text-red-600 font-semibold">※意識がない場合は無理に飲ませない</div>
+                        </div>
+                    `;
+                    break;
+                case 2:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ2: 報告（安全確保後）</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold mb-2">報告項目:</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 誰が（自分の氏名）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> どこで（現在地・可能な限り詳しく）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 被害は（自身の症状：例 めまい、吐き気）
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> どうした（現在取っている対処方法：例 日陰で休憩中、水分補給）
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">ステップ3: その後の行動方針</h3>
+                        <div class="emergency-step">
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>助けを求める・連絡する:</strong> 緊急連絡先に状況を伝える
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>症状が改善しない場合:</strong> 救急車を要請する
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>判断に迷う場合:</strong> 「#7119」に連絡する
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> <strong>一人にならない:</strong> 状況が安定するまで、一人にならないようにする
+                            </div>
+                            
+                            <div class="bg-red-100 border-l-4 border-red-500 p-4 mt-4">
+                                <h5 class="font-semibold text-red-800 mb-2">緊急連絡先</h5>
+                                <div class="text-red-700">
+                                    <div><strong>救急車:</strong> 119</div>
+                                    <div><strong>救急相談:</strong> #7119</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 4:
+                    content = `
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">平時の備え（予防策）</h3>
+                        <div class="emergency-step">
+                            <h4 class="font-semibold text-lg mb-3">作業前の体調確認</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 睡眠不足や体調不良がないか確認
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 前日の深酒に注意
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 朝食はしっかり摂取
+                            </div>
+                            
+                            <h4 class="font-semibold text-lg mb-3 mt-4">水分・塩分のこまめな摂取</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 喉が渇く前に水分を補給
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> スポーツドリンクや塩飴などを活用
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 作業前後や作業中に定期的に摂取
+                            </div>
+                            
+                            <h4 class="font-semibold text-lg mb-3 mt-4">適切な休憩の確保</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 作業計画に基づき、日陰や冷房のある場所で休憩時間を確保
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 暑さ指数（WBGT）に応じた休憩を取る
+                            </div>
+                            
+                            <h4 class="font-semibold text-lg mb-3 mt-4">通気性の良い服装</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 透湿性・通気性の良い素材を着用
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 熱を吸収しにくい明るい色の服装
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 送風機能付き作業着も有効
+                            </div>
+                            
+                            <h4 class="font-semibold text-lg mb-3 mt-4">暑熱順化</h4>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 暑さに体を慣らす期間を設ける
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 徐々に作業時間や負荷を増やす
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox"> 休み明けは特に注意が必要
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            stepContent.innerHTML = content;
+        }
+    </script>
+</body>
+</html>
